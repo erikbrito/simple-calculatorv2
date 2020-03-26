@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+  <div id="app">
+    <v-app id="inspire">
+
+      <v-app-bar
+        app
+      >
+        <v-toolbar-title>Calculator</v-toolbar-title>
+      </v-app-bar>
+  
+      <v-content class="background">
+        
+        <v-layout align-center justify-center fill-height>
+  
+            <v-card class="mx-auto card-calc" color="#eaeaea" elevation="10" shaped max-width="450">
+  
+              <!-- <v-col sm="20">
+                <v-text-field class="field-calc text-lg-right" solo v-model="total"></v-text-field>
+              </v-col> -->
+              
+              <!-- <div>
+                <p class="operation" id="history-value"> {{ hist || 0 }} </p>
+              </div> -->
+              
+              <div>
+                <p class="result" id="output-value"> {{ result || 0 }} </p>
+              </div>
+  
+              <v-row :justify="justify">
+                <div class="ma-3">
+                  <v-btn color="grey" class="button operator" outlined fab @click="clear()">c</v-btn>
+                </div>
+                <div class="ma-3">
+                  <v-btn color="grey" class="button number" outlined fab @click="perc(8)">%</v-btn>
+                </div>
+                <div class="ma-3">
+                  <v-btn color="grey" class="button number" outlined fab @click="square">√</v-btn>
+                </div>
+                <div class="ma-3">
+                  <v-btn color="grey" class="button operator" outlined fab @click="pow()">x²</v-btn>
+                </div>
+              </v-row>
+  
+              <v-row :justify="justify">
+                <div class="ma-3">
+                  <v-btn color="grey" class="button number" outlined fab @click="append(7)">7</v-btn>
+                </div>
+                <div class="ma-3">
+                  <v-btn color="grey" class="button number" outlined fab @click="append(8)">8</v-btn>
+                </div>
+                <div class="ma-3">
+                  <v-btn color="grey" class="button number" outlined fab @click="append(9)">9</v-btn>
+                </div>
+                <div class="ma-3">
+                  <v-btn color="#b351ff" class="button operator" fab ref="+" @click="sum()">+</v-btn>
+                </div>
+              </v-row>
+  
+              <v-row :justify="justify">
+                <div class="ma-3">
+                  <v-btn color="grey" class="button number" outlined fab @click="append(4)">4</v-btn>
+                </div>
+                <div class="ma-3">
+                  <v-btn color="grey" class="button number" outlined fab @click="append(5)">5</v-btn>
+                </div>
+                <div class="ma-3">
+                  <v-btn color="grey" class="button number" outlined fab @click="append(6)">6</v-btn>
+                </div>
+                <div class="ma-3">
+                  <v-btn color="#ffc851" class="button operator" fab @click="subtracty()">-</v-btn>
+                </div>
+              </v-row>
+  
+              <v-row :justify="justify">
+                <div class="ma-3">
+                  <v-btn color="grey" class="button number" outlined fab @click="append(1)">1</v-btn>
+                </div>
+                <div class="ma-3">
+                  <v-btn color="grey" class="button number" outlined fab @click="append(2)">2</v-btn>
+                </div>
+                <div class="ma-3">
+                  <v-btn color="grey" class="button number" outlined fab @click="append(3)">3</v-btn>
+                </div>
+                <div class="ma-3">
+                  <v-btn color="#ff5151" class="button operator" fab @click="multiply()">X</v-btn>
+                </div>
+              </v-row>
+              
+              <v-row :justify="justify">
+                <div class="ma-3">
+                  <v-btn color="grey" class="button number" outlined fab @click="append(0)">0</v-btn>
+                </div>
+                <div class="ma-3">
+                  <v-btn color="grey" class="button dot" outlined fab @click="dot()">.</v-btn>
+                </div>
+                <div class="ma-3">
+                  <v-btn color="" class="button" fab @click="equal()">=</v-btn>
+                </div>
+                <div class="ma-3">
+                  <v-btn color="#4caf50" class="button operator" fab @click="divide()">/</v-btn>
+                </div>
+              </v-row>
+  
+            </v-card>
+  
+        </v-layout>
+  
+      </v-content>
+  
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data: () => ({
+      drawer: null,
+      justify: 'center',
+      result: '',
+      prev: null,
+      operator: null,
+      operatorClick: false,
+    }),
+    created () {
+      this.$vuetify.theme.dark = true
+    },
+    methods: {
+      clear() {
+        this.result = ''
+      },
+      perc() {
+        this.result = parseFloat(this.result)/100
+      },
+      square(){
+        this.result = Math.sqrt(this.result)
+      },
+      pow(){
+        this.result = Math.pow(this.result, 2)
+      },
+      append(number) {
+        if(this.operatorClick){
+          this.result = ''
+          this.operatorClick = false
+        }
+        this.result = this.result + number
+      },
+      dot(){
+        if(this.result.indexOf('.') === -1){ // se o ponto não existir ele seta o ponto. (indexOf retorna o 1° index do elemento encontrado no array, caso eu pedindo pra verificar o '.', se não encontrar ele retorna -1)
+          this.append('.')
+        }
+      },
+      sum(){
+        this.operator = (a, b) => a + b
+        this.setPrev()
+      },
+      subtracty(){
+        this.operator = (a, b) => b - a
+        this.setPrev()
+      },
+      multiply(){
+        this.operator = (a, b) => a * b
+        this.setPrev()
+      },
+      divide(){
+        this.operator = (a, b) => b / a
+        this.setPrev()
+      },
+      equal(){
+        this.result = this.operator(
+          parseFloat(this.result), // Aqui estou passando como parametro o this.result para o 'a'
+          parseFloat(this.prev)  // Aqui estou passando como parametro o this.prev para o 'b'
+        ),
+        this.prev = null
+      },
+      setPrev(){
+        this.prev = this.result
+        this.operatorClick = true
+      }
+    }
+    })
+  </script>
+
+<style scoped>
+  html { 
+    overflow-y: auto;
+  }
+  .card-calc {
+    border-radius:20px;
+    padding: 2em;
+  }
+  .field-calc {
+    margin-bottom: 0;
+    text-align: right;
+  }
+  .field-calc >>> input {
+    text-align: right;
+  }
+   .button {
+    font-size: 1.375rem!important;
+    font-family: unset!important;
+    box-shadow: none!important;
+   }
+   .background {
+     background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+   }
+   .dot{
+     font-size: 3em!important;
+   }
+   .operation{
+     text-align: right;
+     color: #000000;
+     font-size: 1.375rem;
+   }
+   .result{
+     text-align: right;
+     color: #000000;
+     font-size: 2.375rem;
+   }
+  </style>
+</body>
+</html>
